@@ -82,3 +82,23 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
+  deploy:
+    name: Desplegar en Render
+    needs: publish
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - name: Lanzar el despliegue
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: curl --fail --silent --show-error "$DEPLOY_HOOK"
+
+      - name: Comprobar que la API responde
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          curl --fail --silent --show-error \
+            --retry 20 --retry-delay 15 --retry-all-errors \
+            "$APP_URL/health"
