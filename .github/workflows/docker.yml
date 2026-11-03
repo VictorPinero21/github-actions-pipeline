@@ -1,4 +1,4 @@
-name: Docker
+name: Docker - Build, escaneo y publicación
 
 on:
   push:
@@ -14,6 +14,7 @@ concurrency:
 
 jobs:
   build-scan:
+     name: Build y escaneo Trivy
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -42,8 +43,8 @@ jobs:
           exit-code: "1"
           format: table
 
-  publish:
-    # Solo se publica al hacer push a main, nunca desde un PR
+   publish:
+    name: Publicar en GHCR
     if: github.event_name == 'push'
     needs: build-scan
     runs-on: ubuntu-latest

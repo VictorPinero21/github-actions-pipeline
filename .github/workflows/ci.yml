@@ -1,4 +1,4 @@
-name: CI
+name: CI - Validación
 
 on:
   push:
@@ -10,31 +10,18 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run lint
+  ci:
+    name: Calidad
+    uses: ./.github/workflows/reusable-ci.yml
 
-  test:
+  # Un único check estable para exigir en las reglas de main
+  ci-ok:
+    name: Resultado del CI
+    if: always()
+    needs: ci
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [20, 22]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm ci
-      - run: npm run test:ci
+      - run: test "${{ needs.ci.result }}" = "success"
