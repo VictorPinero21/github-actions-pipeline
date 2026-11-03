@@ -1,0 +1,29 @@
+name: Bug report
+description: Something is broken or not working as expected
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1. 
+        2. 
+        3. 
+  - type: input
+    id: location
+    attributes:
+      label: Where did it happen?
+      description: URL or file path.
