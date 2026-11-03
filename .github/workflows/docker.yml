@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build-scan:
-     name: Build y escaneo Trivy
+    name: Build y escaneo Trivy
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -43,7 +43,7 @@ jobs:
           exit-code: "1"
           format: table
 
-   publish:
+  publish:
     name: Publicar en GHCR
     if: github.event_name == 'push'
     needs: build-scan
