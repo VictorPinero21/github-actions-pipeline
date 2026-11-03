@@ -24,7 +24,7 @@ jobs:
 
       # Construye la imagen y la deja en el Docker local del runner (no se sube)
       - name: Build
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           load: true
@@ -75,7 +75,7 @@ jobs:
             type=raw,value=latest
 
       - name: Build y push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
